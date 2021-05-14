@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SunLex.WebAPI.Endpoints.HomeEndpoints
+namespace SunLex.WebAPI.Endpoints.Home
 {
     public class Get : BaseEndpoint
         .WithoutRequest
