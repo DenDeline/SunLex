@@ -1,7 +1,7 @@
 ﻿using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
-using SunLex.ApplicationCore.Entities.WordDictionaryAggregate;
-using SunLex.ApplicationCore.Entities.WordDictionaryAggregate.Specifications;
+using SunLex.ApplicationCore.WordDictionaryAggregate;
+using SunLex.ApplicationCore.WordDictionaryAggregate.Specifications;
 using SunLex.SharedKernel.Interfaces;
 using System;
 using System.Collections.Generic;

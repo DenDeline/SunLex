@@ -1,4 +1,4 @@
-﻿using SunLex.ApplicationCore.Entities.WordDictionaryAggregate;
+﻿using SunLex.ApplicationCore.WordDictionaryAggregate;
 using System;
 using System.Collections.Generic;
 using System.Linq;

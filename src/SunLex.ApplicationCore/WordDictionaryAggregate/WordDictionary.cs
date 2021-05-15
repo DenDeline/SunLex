@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SunLex.ApplicationCore.Entities.WordDictionaryAggregate
+namespace SunLex.ApplicationCore.WordDictionaryAggregate
 {
     public class WordDictionary: BaseEntity, IAggregateRoot
     {

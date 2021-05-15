@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SunLex.ApplicationCore.Entities.WordDictionaryAggregate.Specifications
+namespace SunLex.ApplicationCore.WordDictionaryAggregate.Specifications
 {
     public class DictionaryByIdWithWordsSpec: Specification<WordDictionary>, ISingleResultSpecification
     {
