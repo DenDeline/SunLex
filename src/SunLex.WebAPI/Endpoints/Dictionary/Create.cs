@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SunLex.ApplicationCore.WordDictionaryAggregate;
 using SunLex.SharedKernel.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

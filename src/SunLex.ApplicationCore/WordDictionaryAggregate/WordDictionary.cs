@@ -1,11 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using SunLex.SharedKernel;
 using SunLex.SharedKernel.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SunLex.ApplicationCore.WordDictionaryAggregate
 {
