@@ -1,7 +1,11 @@
-﻿namespace SunLex.WebAPI.Endpoints.Dictionary
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace SunLex.WebAPI.Endpoints.Dictionary
 {
     public class GetDictionaryByIdRequest
     {
-        public int DictionaryId { get; set; }
+        [Required]
+        public Guid DictionaryId { get; set; }
     }
 }

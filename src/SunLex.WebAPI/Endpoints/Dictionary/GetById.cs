@@ -1,4 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
+﻿using System.Linq;
+using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
 using SunLex.ApplicationCore.WordDictionaryAggregate;
 using SunLex.ApplicationCore.WordDictionaryAggregate.Specifications;
@@ -21,13 +22,13 @@ namespace SunLex.WebAPI.Endpoints.Dictionary
         }
 
 
-        [HttpGet("/Dictionaries/{DictionaryId:int}")]
+        [HttpGet("/Dictionaries/{DictionaryId:guid}", Name = "GetDictionaryById")]
         public override async Task<ActionResult<GetDictionaryByIdResponse>> HandleAsync(
             [FromRoute] GetDictionaryByIdRequest request, 
             CancellationToken cancellationToken = default)
         {
             var spec = new DictionaryByIdWithWordsSpec(request.DictionaryId);
-            var entity = await _repository.GetBySpecAsync(spec);
+            var entity = await _repository.GetBySpecAsync(spec, cancellationToken);
 
             if (entity == null) return NotFound();
 
@@ -35,7 +36,12 @@ namespace SunLex.WebAPI.Endpoints.Dictionary
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                WordsTranslations = entity.WordsTranslations
+                WordsTranslations = entity.WordsTranslations.Select(t => new WordTranslationDto
+                {
+                    Id = t.Id,
+                    FromWord = t.FromWord.ToString(),
+                    ToWord = t.ToWord.ToString(),
+                }).ToList()
             };
 
             return Ok(response);

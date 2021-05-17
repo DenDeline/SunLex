@@ -5,16 +5,17 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
 {
     public class Word: BaseEntity
     {
-        private Word()
-        {
-
-        }
-
+        private Word () {  }
         public Word(string spelling)
         {
             Spelling = Guard.Against.NullOrEmpty(spelling, nameof(spelling));
         }
 
         public string Spelling { get; private set; }
+
+        public override string ToString()
+        {
+            return Spelling;
+        }
     }
 }

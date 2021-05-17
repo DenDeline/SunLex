@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+﻿using System;
+using Ardalis.GuardClauses;
 using SunLex.SharedKernel;
 using SunLex.SharedKernel.Interfaces;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
         {
             Guard.Against.Null(newWordTranslation, nameof(newWordTranslation));
             _wordsTranslations.Add(newWordTranslation);
+        }
+
+        public void RemoveWordTranslation()
+        {
+            
         }
             
         public void UpdateName(string newName)

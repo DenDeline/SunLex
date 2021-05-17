@@ -4,6 +4,7 @@ using SunLex.ApplicationCore.WordDictionaryAggregate;
 using SunLex.SharedKernel.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SunLex.WebAPI.Endpoints.Dictionary
 {
@@ -32,7 +33,11 @@ namespace SunLex.WebAPI.Endpoints.Dictionary
                 Name = createdItem.Name
             };
 
-            return Ok(response);
+            return CreatedAtRoute(
+                "GetDictionaryById", 
+                new GetDictionaryByIdRequest { DictionaryId = response.Id }, 
+                response
+                );
         }
     }
 }

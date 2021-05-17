@@ -5,11 +5,8 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
 {
     public class WordTranslation: BaseEntity
     {
-        private WordTranslation()
-        {
-
-        }
-
+        private WordTranslation() { }
+        
         public WordTranslation(Word fromWord, Word toWord)
         {
             FromWord = Guard.Against.Null(fromWord, nameof(fromWord));
@@ -18,5 +15,12 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
 
         public Word FromWord { get; private set; }
         public Word ToWord { get; private set; }
+        
+        public string? Description { get; private set; }
+
+        public void UpdateDescription(string description)
+        {
+            Description = Guard.Against.Default(description, nameof(description));
+        }
     }
 }
