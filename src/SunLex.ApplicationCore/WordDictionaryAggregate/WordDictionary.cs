@@ -24,11 +24,6 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
             _wordsTranslations.Add(newWordTranslation);
         }
 
-        public void RemoveWordTranslation()
-        {
-            
-        }
-            
         public void UpdateName(string newName)
         {
             Name = Guard.Against.NullOrEmpty(newName, nameof(newName));

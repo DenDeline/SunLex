@@ -18,9 +18,9 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
         
         public string? Description { get; private set; }
 
-        public void UpdateDescription(string description)
+        public void UpdateDescription(string? description)
         {
-            Description = Guard.Against.Default(description, nameof(description));
+            Description = description;
         }
     }
 }
