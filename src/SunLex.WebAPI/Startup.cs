@@ -7,14 +7,23 @@ using Microsoft.OpenApi.Models;
 using SunLex.Infrastructure;
 using SunLex.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace SunLex.WebAPI
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(config => config.UseInMemoryDatabase("TestDb"));
+            services.AddDbContext<AppDbContext>(config => 
+                config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllers();
 
