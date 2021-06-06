@@ -26,12 +26,12 @@ namespace SunLex.WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("/dict/{dictionaryName}/translations/", Name = nameof(GetAllWordsTranslations))]
+        [HttpGet("/dict/{dictName}/translations/", Name = nameof(GetAllWordsTranslations))]
         public async Task<ActionResult<IEnumerable<ReadWordTranslationDto>>> GetAllWordsTranslations(
-            [FromRoute] string dictionaryName,
+            [FromRoute] string dictName,
             CancellationToken cancellationToken = new())
         {
-            var spec = new DictionaryByNameWithWordsSpec(dictionaryName);
+            var spec = new DictionaryByNameWithWordsSpec(dictName);
             var dictionary = await _repository.GetBySpecAsync(spec, cancellationToken);
 
             if (dictionary is null) return NotFound();
@@ -42,13 +42,13 @@ namespace SunLex.WebAPI.Controllers
         }
         
         
-        [HttpGet("/dict/{dictionaryName}/translations/{translationId:int}", Name = nameof(GetWordTranslationById))]
+        [HttpGet("/dict/{dictName}/translations/{translationId:int}", Name = nameof(GetWordTranslationById))]
         public async Task<ActionResult<ReadWordTranslationDto>> GetWordTranslationById(
-            [FromRoute] string dictionaryName,
+            [FromRoute] string dictName,
             [FromRoute] int translationId,
             CancellationToken cancellationToken = new())
         {
-            var spec = new DictionaryByNameWithWordsSpec(dictionaryName);
+            var spec = new DictionaryByNameWithWordsSpec(dictName);
             var dictionary = await _repository.GetBySpecAsync(spec, cancellationToken);
 
             if (dictionary is null) return NotFound();
@@ -62,13 +62,13 @@ namespace SunLex.WebAPI.Controllers
             return Ok(response);
         }
         
-        [HttpPost("/dict/{dictionaryName}/translations/")]
+        [HttpPost("/dict/{dictName}/translations/")]
         public async Task<ActionResult> CreateWordTranslation(
-            [FromRoute] string dictionaryName,
+            [FromRoute] string dictName,
             [FromBody] CreateWordTranslationDto dto,
             CancellationToken cancellationToken = new())
         {
-            var spec = new DictionaryByNameWithWordsSpec(dictionaryName);
+            var spec = new DictionaryByNameWithWordsSpec(dictName);
             var dictionary = await _repository.GetBySpecAsync(spec, cancellationToken);
 
             if (dictionary is null) return NotFound();
@@ -83,7 +83,7 @@ namespace SunLex.WebAPI.Controllers
 
             return CreatedAtRoute(
                 nameof(GetWordTranslationById), 
-                new { dictionaryName, translationId = response.Id},
+                new {dictionaryName = dictName, translationId = response.Id},
                 response);
         }
     }

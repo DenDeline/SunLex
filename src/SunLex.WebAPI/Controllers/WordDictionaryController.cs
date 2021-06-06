@@ -33,12 +33,12 @@ namespace SunLex.WebAPI.Controllers
         
         
         
-        [HttpGet("/dict/{dictionaryName}", Name = nameof(GetWordDictionaryByName))]
+        [HttpGet("/dict/{dictName}", Name = nameof(GetWordDictionaryByName))]
         public async Task<ActionResult<ReadWordDictionaryDto>> GetWordDictionaryByName(
-                [FromRoute] string dictionaryName,
+                [FromRoute] string dictName,
                 CancellationToken cancellationToken = new())
         {
-            var spec = new DictionaryByNameSpec(dictionaryName);
+            var spec = new DictionaryByNameSpec(dictName);
             var entity = await _repository.GetBySpecAsync(spec, cancellationToken);
 
             if (entity is null) return NotFound();
@@ -77,15 +77,15 @@ namespace SunLex.WebAPI.Controllers
             );
         }
 
-        [HttpPut("/dict/{dictionaryName}")]
+        [HttpPut("/dict/{dictName}")]
         public async Task<ActionResult> UpdateWordDictionaryByName(
-            [FromRoute] string dictionaryName,
+            [FromRoute] string dictName,
             [FromBody] UpdateWordDictionaryDto dto,
             [FromServices] IWordDictionaryService dictionaryService,
             CancellationToken cancellationToken = new())
         {
             var result = await dictionaryService.UpdateInformationByNameAsync(
-                dictionaryName,
+                dictName,
                 dto.Name,
                 dto.Description,
                 dto.ThumbnailImageUrl,
@@ -99,7 +99,7 @@ namespace SunLex.WebAPI.Controllers
 
             if (result.Status == ResultStatus.NotFound)
             {
-                return NotFound(dictionaryName);
+                return NotFound(dictName);
             }
 
             if (result.Status == ResultStatus.Error)
