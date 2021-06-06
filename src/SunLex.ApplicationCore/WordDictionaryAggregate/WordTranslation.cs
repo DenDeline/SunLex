@@ -3,7 +3,7 @@ using SunLex.SharedKernel;
 
 namespace SunLex.ApplicationCore.WordDictionaryAggregate
 {
-    public class WordTranslation: BaseEntity
+    public class WordTranslation: BaseEntity<int>
     {
         private WordTranslation() { }
         
@@ -15,12 +15,6 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
 
         public Word FromWord { get; private set; }
         public Word ToWord { get; private set; }
-        
-        public string? Description { get; private set; }
-
-        public void UpdateDescription(string? description)
-        {
-            Description = description;
-        }
+        public string? Description { get; set; }
     }
 }
