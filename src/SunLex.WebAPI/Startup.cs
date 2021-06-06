@@ -22,6 +22,8 @@ namespace SunLex.WebAPI
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup));
+            
             services.AddDbContext<AppDbContext>(config => 
                 config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -45,7 +47,11 @@ namespace SunLex.WebAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SunLex.WebAPI v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.DisplayRequestDuration();
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SunLex.WebAPI v1");
+                });
             }
 
             app.UseHttpsRedirection();
