@@ -1,8 +1,8 @@
-﻿using System;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 using SunLex.SharedKernel;
 using SunLex.SharedKernel.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SunLex.ApplicationCore.WordDictionaryAggregate
 {
@@ -21,13 +21,9 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
             Name = Guard.Against.NullOrEmpty(name.Trim(), nameof(name));
             NormalizedName = name.Trim().ToUpper().Normalize();
         }
-        
-        public WordDictionary(Guid id, string name)
-        {
-            Id = id;
-            Name = Guard.Against.NullOrEmpty(name.Trim(), nameof(name));
-            NormalizedName = name.Trim().ToUpper().Normalize();
-        }
+
+        public WordTranslation? GetWordTranslationById(int wordTranslationId)
+            => WordsTranslations.FirstOrDefault(translation => translation.Id == wordTranslationId);
 
         public void AddWordTranslation(WordTranslation newWordTranslation)
         {
@@ -40,20 +36,22 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
             Guard.Against.Null(deletingWordTranslation, nameof(deletingWordTranslation));
             return _wordsTranslations.Remove(deletingWordTranslation);
         }
-        
+
         public void UpdateName(string newName)
         {
             Name = Guard.Against.NullOrEmpty(newName, nameof(newName));
         }
 
-        public void UpdateThumbnailImageUrl(string? newImageUrl)
+        public void UpdateThumbnailImageUrl(string newImageUrl)
         {
-            ThumbnailImageUrl = string.IsNullOrEmpty(newImageUrl) ? null : newImageUrl;
+            var trimNewImageUrl = newImageUrl.Trim();
+            ThumbnailImageUrl = string.IsNullOrEmpty(trimNewImageUrl) ? null : trimNewImageUrl;
         }
         
-        public void UpdateDescription(string? newDescription)
+        public void UpdateDescription(string newDescription)
         {
-            Description = string.IsNullOrEmpty(newDescription) ? null : newDescription;
+            var trimNewDescription = newDescription.Trim();
+            Description = string.IsNullOrEmpty(trimNewDescription) ? null : trimNewDescription;
         }
     }
 }

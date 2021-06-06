@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace SunLex.SharedKernel.Dtos.WordDictionary
+﻿namespace SunLex.SharedKernel.Dtos.WordDictionary
 {
-    public class CreateWordDictionaryDto
+    public record CreateWordDictionaryDto
     {
-        public string Name { get; set; }
+        public string Name { get; init; }
     }
 }

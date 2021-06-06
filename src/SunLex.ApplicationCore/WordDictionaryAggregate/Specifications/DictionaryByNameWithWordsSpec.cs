@@ -6,9 +6,11 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate.Specifications
     {
         public DictionaryByNameWithWordsSpec(string dictionaryName)
         {
-            Query
-                .Where(dict => dict.Name == dictionaryName)
-                .Include(dict => dict.WordsTranslations);
+            var query = Query
+                .Where(dict => dict.NormalizedName == dictionaryName.Trim().ToUpper().Normalize());
+
+            query.Include(dict => dict.WordsTranslations).ThenInclude(tr => tr.FromWord);
+            query.Include(dict => dict.WordsTranslations).ThenInclude(tr => tr.ToWord);
         }
     }
 }

@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SunLex.ApplicationCore.WordDictionaryAggregate;
 using SunLex.ApplicationCore.WordDictionaryAggregate.Specifications;
 using SunLex.SharedKernel.Dtos.WordDictionary;
-using SunLex.SharedKernel.Dtos.WordTranslation;
 using SunLex.SharedKernel.Interfaces;
 
 namespace SunLex.WebAPI.Controllers
@@ -18,70 +17,49 @@ namespace SunLex.WebAPI.Controllers
     {
         private readonly IRepository<WordDictionary> _repository;
         private readonly ILogger<WordDictionaryController> _logger;
+        private readonly IMapper _mapper;
 
         public WordDictionaryController(
             IRepository<WordDictionary> repository,
-            ILogger<WordDictionaryController> logger)
+            ILogger<WordDictionaryController> logger,
+            IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
         
         
-        [HttpGet("/dictionaries/{dictionaryId:guid}")]
+        [HttpGet("/dict/{dictionaryId:guid}")]
         public async Task<ActionResult<ReadWordDictionaryDto>> GetWordDictionaryById(
             [FromRoute] Guid dictionaryId, 
             CancellationToken cancellationToken = new())
         {
-            var spec = new DictionaryByIdWithWordsSpec(dictionaryId);
-            var entity = await _repository.GetBySpecAsync(spec, cancellationToken);
+            var entity = await _repository.GetByIdAsync(dictionaryId, cancellationToken);
 
-            if (entity == null) return NotFound();
+            if (entity is null) return NotFound();
 
-            var response = new ReadWordDictionaryDto
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                WordsTranslations = entity.WordsTranslations.Select(t => new ReadWordTranslationDto
-                {
-                    Id = t.Id,
-                    FromWord = t.FromWord.ToString(),
-                    ToWord = t.ToWord.ToString(),
-                }).ToList()
-            };
-
+            var response = _mapper.Map<ReadWordDictionaryDto>(entity);
+            
             return Ok(response);
         }
 
-        [HttpGet("/dictionaries/{dictionaryName}", Name = nameof(GetWordDictionaryByName))]
+        [HttpGet("/dict/{dictionaryName}", Name = nameof(GetWordDictionaryByName))]
         public async Task<ActionResult<ReadWordDictionaryDto>> GetWordDictionaryByName(
                 [FromRoute] string dictionaryName,
                 CancellationToken cancellationToken = new())
         {
-            var spec = new DictionaryByNameWithWordsSpec(dictionaryName);
+            var spec = new DictionaryByNameSpec(dictionaryName);
             var entity = await _repository.GetBySpecAsync(spec, cancellationToken);
 
-            if (entity is null)
-            {
-                return NotFound();
-            }   
+            if (entity is null) return NotFound();
             
-            var response = new ReadWordDictionaryDto
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                WordsTranslations = entity.WordsTranslations.Select(t => new ReadWordTranslationDto
-                {
-                    Id = t.Id,
-                    FromWord = t.FromWord.ToString(),
-                    ToWord = t.ToWord.ToString(),
-                }).ToList()
-            };
-
+            var response = _mapper.Map<ReadWordDictionaryDto>(entity);
+            
             return Ok(response);
         }
 
-        [HttpPost("/dictionaries")]
+        [HttpPost("/dict")]
         [ProducesResponseType(typeof(ReadWordDictionaryDto), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateWordDictionary(
             [FromBody] CreateWordDictionaryDto request, 
@@ -90,33 +68,24 @@ namespace SunLex.WebAPI.Controllers
             var newWordDictionary = new WordDictionary(request.Name);
             var createdItem = await _repository.AddAsync(newWordDictionary, cancellationToken);
 
-            var response = new ReadWordDictionaryDto
-            {
-                Id = createdItem.Id,
-                Name = createdItem.Name
-            };
+            var response = _mapper.Map<ReadWordDictionaryDto>(createdItem);
 
             return CreatedAtRoute(
-                "GetWordDictionaryByName", 
+                nameof(GetWordDictionaryByName), 
                 new { dictionaryName = response.Name }, 
                 response
             );
         }
 
-        [HttpPut("/dictionaries/{dictionaryId:guid}")]
+        [HttpPut("/dict/{dictionaryId:guid}")]
         public async Task<ActionResult> UpdateWordDictionaryById(
             [FromRoute] Guid dictionaryId,
             [FromBody] UpdateWordDictionaryDto dto,
             CancellationToken cancellationToken = new())
         {
-            var spec = new DictionaryByIdWithWordsSpec(dictionaryId);
+            var entity = await _repository.GetByIdAsync(dictionaryId, cancellationToken);
 
-            var entity = await _repository.GetBySpecAsync(spec, cancellationToken);
-
-            if (entity is null)
-            {
-                return NotFound();
-            }
+            if (entity is null) return NotFound();
 
             if (!string.IsNullOrEmpty(dto.Name))
             {
