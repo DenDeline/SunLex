@@ -9,7 +9,6 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
     public class WordDictionary: BaseEntity, IAggregateRoot
     {
         public string Name { get; private set; }
-        public string NormalizedName { get; private set; }
         public string? Description { get; private set; } 
         public string? ThumbnailImageUrl { get; private set; }
 
@@ -19,7 +18,6 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
         public WordDictionary(string name)
         {
             Name = Guard.Against.NullOrEmpty(name.Trim(), nameof(name));
-            NormalizedName = name.Trim().ToUpper().Normalize();
         }
 
         public WordTranslation? GetWordTranslationById(int wordTranslationId)

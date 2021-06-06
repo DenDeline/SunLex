@@ -7,7 +7,7 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate.Specifications
         public DictionaryByNameSpec(string dictionaryName)
         {
             Query
-                .Where(dict => dict.NormalizedName == dictionaryName.Trim().ToUpper().Normalize());
+                .Where(dict => dict.Name == dictionaryName);
         }
     }
 }

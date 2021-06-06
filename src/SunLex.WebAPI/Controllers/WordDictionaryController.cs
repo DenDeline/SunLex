@@ -31,20 +31,7 @@ namespace SunLex.WebAPI.Controllers
         }
         
         
-        [HttpGet("/dict/{dictionaryId:guid}")]
-        public async Task<ActionResult<ReadWordDictionaryDto>> GetWordDictionaryById(
-            [FromRoute] Guid dictionaryId, 
-            CancellationToken cancellationToken = new())
-        {
-            var entity = await _repository.GetByIdAsync(dictionaryId, cancellationToken);
-
-            if (entity is null) return NotFound();
-
-            var response = _mapper.Map<ReadWordDictionaryDto>(entity);
-            
-            return Ok(response);
-        }
-
+        
         [HttpGet("/dict/{dictionaryName}", Name = nameof(GetWordDictionaryByName))]
         public async Task<ActionResult<ReadWordDictionaryDto>> GetWordDictionaryByName(
                 [FromRoute] string dictionaryName,
