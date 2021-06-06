@@ -13,6 +13,8 @@ namespace SunLex.WebAPI
 {
     public class Startup
     {
+        public const string NextJsClientCorsPolicy = "NextJsClientCorsPolicy";
+        
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -22,6 +24,13 @@ namespace SunLex.WebAPI
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(config => config.AddPolicy(NextJsClientCorsPolicy, builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            }));
+            
             services.AddAutoMapper(typeof(Startup));
             
             services.AddDbContext<AppDbContext>(config => 
@@ -53,9 +62,11 @@ namespace SunLex.WebAPI
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "SunLex.WebAPI v1");
                 });
             }
-
+            
             app.UseHttpsRedirection();
 
+            app.UseCors(NextJsClientCorsPolicy);
+            
             app.UseRouting();
 
             app.UseAuthorization();

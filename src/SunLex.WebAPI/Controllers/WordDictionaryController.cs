@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -57,6 +58,17 @@ namespace SunLex.WebAPI.Controllers
             var response = _mapper.Map<ReadWordDictionaryDto>(entity);
             
             return Ok(response);
+        }
+
+        [HttpGet("/dict")]
+        public async Task<ActionResult<IEnumerable<ReadWordDictionaryDto>>> GetAllDictionaries(
+            CancellationToken cancellationToken = new())
+        {
+            
+            var entities = await _repository.ListAsync(cancellationToken);
+            var result = _mapper.Map<IEnumerable<ReadWordDictionaryDto>>(entities);
+
+            return Ok(result);
         }
 
         [HttpPost("/dict")]
