@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Ardalis.Result;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SunLex.ApplicationCore.Interfaces;
 using SunLex.ApplicationCore.WordDictionaryAggregate;
 using SunLex.ApplicationCore.WordDictionaryAggregate.Specifications;
 using SunLex.SharedKernel.Dtos.WordDictionary;
@@ -76,28 +77,37 @@ namespace SunLex.WebAPI.Controllers
             );
         }
 
-        [HttpPut("/dict/{dictionaryId:guid}")]
-        public async Task<ActionResult> UpdateWordDictionaryById(
-            [FromRoute] Guid dictionaryId,
+        [HttpPut("/dict/{dictionaryName}")]
+        public async Task<ActionResult> UpdateWordDictionaryByName(
+            [FromRoute] string dictionaryName,
             [FromBody] UpdateWordDictionaryDto dto,
+            [FromServices] IWordDictionaryService dictionaryService,
             CancellationToken cancellationToken = new())
         {
-            var entity = await _repository.GetByIdAsync(dictionaryId, cancellationToken);
+            var result = await dictionaryService.UpdateInformationByNameAsync(
+                dictionaryName,
+                dto.Name,
+                dto.Description,
+                dto.ThumbnailImageUrl,
+                cancellationToken);
 
-            if (entity is null) return NotFound();
-
-            if (!string.IsNullOrEmpty(dto.Name))
+            if (result.IsSuccess)
             {
-                entity.UpdateName(dto.Name);
+                var response = _mapper.Map<ReadWordDictionaryDto>(result.Value);
+                return Ok(response);
             }
-            
-            entity.UpdateDescription(dto.Description);
-            entity.UpdateThumbnailImageUrl(dto.ThumbnailImageUrl);
 
+            if (result.Status == ResultStatus.NotFound)
+            {
+                return NotFound(dictionaryName);
+            }
 
-            await _repository.UpdateAsync(entity, cancellationToken);
+            if (result.Status == ResultStatus.Error)
+            {
+                return BadRequest(result.Errors);
+            }
 
-            return Ok();
+            return BadRequest();
         }
     }
 }

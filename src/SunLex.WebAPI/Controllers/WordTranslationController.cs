@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -52,7 +53,7 @@ namespace SunLex.WebAPI.Controllers
 
             if (dictionary is null) return NotFound();
             
-            var wordTranslation = dictionary.GetWordTranslationById(translationId);
+            var wordTranslation = dictionary.WordsTranslations.FirstOrDefault(translation => translation.Id == translationId);
 
             if (wordTranslation is null) return NotFound();
 
@@ -82,7 +83,7 @@ namespace SunLex.WebAPI.Controllers
 
             return CreatedAtRoute(
                 nameof(GetWordTranslationById), 
-                new {dictionaryName = dictionaryName, translationId = response.Id},
+                new { dictionaryName, translationId = response.Id},
                 response);
         }
     }

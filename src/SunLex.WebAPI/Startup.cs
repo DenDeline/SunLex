@@ -8,6 +8,7 @@ using SunLex.Infrastructure;
 using SunLex.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SunLex.ApplicationCore;
 
 namespace SunLex.WebAPI
 {
@@ -48,6 +49,7 @@ namespace SunLex.WebAPI
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new DefaultInfrastructureModule());
+            builder.RegisterModule(new DefaultCoreModule());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

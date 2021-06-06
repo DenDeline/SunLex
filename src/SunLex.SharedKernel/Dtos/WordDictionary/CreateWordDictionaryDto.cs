@@ -1,7 +1,10 @@
-﻿namespace SunLex.SharedKernel.Dtos.WordDictionary
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SunLex.SharedKernel.Dtos.WordDictionary
 {
     public record CreateWordDictionaryDto
     {
-        public string Name { get; init; }
+        [Required]
+        public string Name { get; init; } = null!;
     }
 }

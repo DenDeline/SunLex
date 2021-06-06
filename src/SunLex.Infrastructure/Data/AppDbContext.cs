@@ -13,7 +13,7 @@ namespace SunLex.Infrastructure.Data
         }
 
         public DbSet<WordDictionary> WordDictionaries { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
