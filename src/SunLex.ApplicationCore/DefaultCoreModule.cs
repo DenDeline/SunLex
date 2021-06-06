@@ -8,8 +8,8 @@ namespace SunLex.ApplicationCore
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<WordDictionaryService>()
-                .As<IWordDictionaryService>()
+            builder.RegisterType<LearningResourcesService>()
+                .As<ILearningResourcesService>()
                 .InstancePerLifetimeScope();
         }
     }

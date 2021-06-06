@@ -55,7 +55,6 @@ namespace SunLex.WebAPI.Controllers
             
             var entities = await _repository.ListAsync(cancellationToken);
             var result = _mapper.Map<IEnumerable<ReadWordDictionaryDto>>(entities);
-
             return Ok(result);
         }
 
@@ -81,7 +80,7 @@ namespace SunLex.WebAPI.Controllers
         public async Task<ActionResult> UpdateWordDictionaryByName(
             [FromRoute] string dictName,
             [FromBody] UpdateWordDictionaryDto dto,
-            [FromServices] IWordDictionaryService dictionaryService,
+            [FromServices] ILearningResourcesService dictionaryService,
             CancellationToken cancellationToken = new())
         {
             var result = await dictionaryService.UpdateInformationByNameAsync(

@@ -9,15 +9,15 @@ using SunLex.SharedKernel.Interfaces;
 
 namespace SunLex.ApplicationCore.Services
 {
-    public class WordDictionaryService: IWordDictionaryService
+    public class LearningResourcesService: ILearningResourcesService
     {
         private readonly IRepository<WordDictionary> _repository;
 
-        public WordDictionaryService(IRepository<WordDictionary> repository)
+        public LearningResourcesService(IRepository<WordDictionary> repository)
         {
             _repository = repository;
         }
-        
+
         public async Task<Result<WordDictionary>> UpdateInformationByNameAsync(
             string dictionaryName,
             string newDictionaryName, 

@@ -5,7 +5,7 @@ using SunLex.ApplicationCore.WordDictionaryAggregate;
 
 namespace SunLex.ApplicationCore.Interfaces
 {
-    public interface IWordDictionaryService
+    public interface ILearningResourcesService
     {
         Task<Result<WordDictionary>> UpdateInformationByNameAsync(
             string dictionaryName, 

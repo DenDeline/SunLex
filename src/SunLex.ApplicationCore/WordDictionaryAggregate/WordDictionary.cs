@@ -11,10 +11,9 @@ namespace SunLex.ApplicationCore.WordDictionaryAggregate
         public string Name { get; private set; }
         public string? Description { get; private set; } 
         public string? ThumbnailImageUrl { get; private set; }
-        
-        public DateTime CreatedAt { get; private set; }
+        public DateTime CreatedAt { get; } = DateTime.Now;
         public DateTime UpdatedAt { get; private set; }
-
+        
         private readonly List<WordTranslation> _wordsTranslations = new();
         public IReadOnlyCollection<WordTranslation> WordsTranslations => _wordsTranslations.AsReadOnly();
         
