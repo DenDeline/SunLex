@@ -2,16 +2,19 @@
 using System.Threading.Tasks;
 using Ardalis.Result;
 using SunLex.ApplicationCore.WordDictionaryAggregate;
+using SunLex.SharedKernel.Dtos.WordDictionary;
 
 namespace SunLex.ApplicationCore.Interfaces
 {
     public interface ILearningResourcesService
-    {
+    { 
+        Task<Result<WordDictionary>> CreateAsync(
+            WordDictionary wordDictionary,
+            CancellationToken cancellationToken = new());
+
         Task<Result<WordDictionary>> UpdateInformationByNameAsync(
             string dictionaryName, 
-            string newDictionaryName, 
-            string? newDescription, 
-            string? newThumbnailImageUrl,
+            UpdateWordDictionaryDto dto,
             CancellationToken cancellationToken = new()
         );
     }

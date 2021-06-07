@@ -18,19 +18,18 @@ namespace SunLex.WebAPI.Controllers
     public class WordDictionaryController: ControllerBase
     {
         private readonly IRepository<WordDictionary> _repository;
-        private readonly ILogger<WordDictionaryController> _logger;
+        private readonly ILearningResourcesService _learningResourcesService;
         private readonly IMapper _mapper;
 
         public WordDictionaryController(
             IRepository<WordDictionary> repository,
-            ILogger<WordDictionaryController> logger,
+            ILearningResourcesService learningResourcesService,
             IMapper mapper)
         {
             _repository = repository;
-            _logger = logger;
+            _learningResourcesService = learningResourcesService;
             _mapper = mapper;
         }
-        
         
         
         [HttpGet("/dict/{dictName}", Name = nameof(GetWordDictionaryByName))]
@@ -65,30 +64,30 @@ namespace SunLex.WebAPI.Controllers
             CancellationToken cancellationToken = new())
         {
             var newWordDictionary = new WordDictionary(request.Name);
-            var createdItem = await _repository.AddAsync(newWordDictionary, cancellationToken);
 
-            var response = _mapper.Map<ReadWordDictionaryDto>(createdItem);
+            var createdItemResult = await _learningResourcesService.CreateAsync(newWordDictionary, cancellationToken);
+
+            if (!createdItemResult.IsSuccess)
+            {
+                // TODO: Error behaviour
+            }
+            
+            var response = _mapper.Map<ReadWordDictionaryDto>(createdItemResult.Value);
 
             return CreatedAtRoute(
                 nameof(GetWordDictionaryByName), 
-                new { dictionaryName = response.Name }, 
+                new { dictName = response.Name }, 
                 response
             );
         }
 
-        [HttpPut("/dict/{dictName}")]
+        [HttpPut("/dict/{dictName}", Name = nameof(UpdateWordDictionaryByName))]
         public async Task<ActionResult> UpdateWordDictionaryByName(
             [FromRoute] string dictName,
             [FromBody] UpdateWordDictionaryDto dto,
-            [FromServices] ILearningResourcesService dictionaryService,
             CancellationToken cancellationToken = new())
         {
-            var result = await dictionaryService.UpdateInformationByNameAsync(
-                dictName,
-                dto.Name,
-                dto.Description,
-                dto.ThumbnailImageUrl,
-                cancellationToken);
+            var result = await _learningResourcesService.UpdateInformationByNameAsync(dictName, dto, cancellationToken);
 
             if (result.IsSuccess)
             {

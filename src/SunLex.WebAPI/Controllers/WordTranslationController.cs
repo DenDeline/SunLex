@@ -83,7 +83,7 @@ namespace SunLex.WebAPI.Controllers
 
             return CreatedAtRoute(
                 nameof(GetWordTranslationById), 
-                new {dictionaryName = dictName, translationId = response.Id},
+                new {dictName = dictName, translationId = response.Id},
                 response);
         }
     }
